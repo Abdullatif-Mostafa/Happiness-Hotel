@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Grid,
@@ -12,8 +12,10 @@ import {
   Paper,
   Button,
   Rating,
+  IconButton,
+  Divider,
 } from '@mui/material';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import BusinessIcon from '@mui/icons-material/Business';
 import GroupIcon from '@mui/icons-material/Group';
 import StarIcon from '@mui/icons-material/Star';
@@ -21,6 +23,11 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EventIcon from '@mui/icons-material/Event';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import TimelineIcon from '@mui/icons-material/Timeline';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import EmailIcon from '@mui/icons-material/Email';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import TwitterIcon from '@mui/icons-material/Twitter';
 import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot } from '@mui/lab';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -97,46 +104,123 @@ const stats = [
   { icon: <LocationOnIcon />, value: '5', label: 'مواقع مميزة', color: '#FF5722' },
 ];
 
+const teamMembers = [
+  {
+    name: 'محمد العزيز',
+    position: 'المدير التنفيذي',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+    bio: 'خبرة 20 عاماً في مجال الضيافة الفاخرة',
+    social: {
+      linkedin: '#',
+      twitter: '#',
+      email: 'mohamed@example.com'
+    }
+  },
+  {
+    name: 'فاطمة الزهراء',
+    position: 'مديرة العمليات',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
+    bio: 'متخصصة في تطوير تجربة الضيوف',
+    social: {
+      linkedin: '#',
+      twitter: '#',
+      email: 'fatima@example.com'
+    }
+  },
+  {
+    name: 'عبدالله الخالد',
+    position: 'رئيس قسم الضيافة',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
+    bio: 'حاصل على شهادات عالمية في الضيافة',
+    social: {
+      linkedin: '#',
+      twitter: '#',
+      email: 'abdullah@example.com'
+    }
+  },
+];
+
 function About() {
   const theme = useTheme();
   const [hoveredTestimonial, setHoveredTestimonial] = useState(null);
+  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
+
+  const nextTestimonial = () => {
+    setCurrentTestimonialIndex((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const prevTestimonial = () => {
+    setCurrentTestimonialIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
+
+  useEffect(() => {
+    const timer = setInterval(nextTestimonial, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <Box sx={{ pt: { xs: 6, md: 8 }, pb: 8, minHeight: '100vh' }}>
-      <Container maxWidth="lg">
-        {/* Hero Section */}
-        <motion.div {...fadeInUp}>
-          <Box sx={{ textAlign: 'center', mb: 8 }}>
+    <Box sx={{ overflow: 'hidden' }}>
+      {/* Parallax Hero Section */}
+      <Box
+        sx={{
+          position: 'relative',
+          height: '70vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          bgcolor: 'primary.dark',
+          color: 'white',
+          overflow: 'hidden',
+        }}
+      >
+        <motion.div style={{ y }} sx={{ position: 'absolute', width: '100%', height: '100%' }}>
+          <Box
+            component="img"
+            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1920"
+            alt="Hotel Facade"
+            sx={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              opacity: 0.4,
+            }}
+          />
+        </motion.div>
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
             <Typography
-              component="h1"
-              variant="h3"
-              color="primary"
-              gutterBottom
+              variant="h2"
               sx={{
-                fontWeight: 600,
-                position: 'relative',
-                display: 'inline-block',
-                '&::after': {
-                  content: '""',
-                  position: 'absolute',
-                  bottom: -8,
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: 60,
-                  height: 4,
-                  backgroundColor: 'primary.main',
-                  borderRadius: 2,
-                }
+                fontWeight: 700,
+                textAlign: 'center',
+                mb: 3,
+                textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
               }}
             >
-              من نحن
+              مرحباً بكم في فندق السعادة
             </Typography>
-            <Typography variant="h6" color="text.secondary" sx={{ maxWidth: '800px', mx: 'auto', mt: 2 }}>
-              نحن نقدم تجربة فندقية استثنائية تجمع بين الأصالة العربية والرفاهية العصرية
+            <Typography
+              variant="h5"
+              sx={{
+                textAlign: 'center',
+                maxWidth: 800,
+                mx: 'auto',
+                textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
+              }}
+            >
+              حيث تلتقي الأصالة العربية مع الرفاهية العصرية
             </Typography>
-          </Box>
-        </motion.div>
+          </motion.div>
+        </Container>
+      </Box>
 
+      <Container maxWidth="lg">
         {/* Stats Section */}
         <Grid container spacing={3} sx={{ mb: 8 }}>
           {stats.map((stat, index) => (
@@ -243,59 +327,82 @@ function About() {
           </Timeline>
         </Box>
 
-        {/* Testimonials */}
-        <Box sx={{ mb: 8 }}>
+        {/* Team Section */}
+        <Box sx={{ my: 8 }}>
           <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', mb: 4 }}>
-            <FormatQuoteIcon sx={{ mr: 1, verticalAlign: 'bottom' }} />
-            ماذا يقول عنا ضيوفنا
+            <GroupIcon sx={{ mr: 1, verticalAlign: 'bottom' }} />
+            فريقنا المتميز
           </Typography>
-          <Grid container spacing={3}>
-            {testimonials.map((testimonial, index) => (
+          <Grid container spacing={4}>
+            {teamMembers.map((member, index) => (
               <Grid item xs={12} md={4} key={index}>
                 <motion.div
-                  variants={fadeInUp}
-                  initial="initial"
-                  whileInView="animate"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.2 }}
-                  whileHover={{ y: -8 }}
                 >
                   <Card
                     sx={{
                       height: '100%',
-                      position: 'relative',
-                      '&::before': {
-                        content: '""',
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: 4,
-                        backgroundColor: theme.palette.primary.main,
-                        borderTopLeftRadius: theme.shape.borderRadius,
-                        borderTopRightRadius: theme.shape.borderRadius,
+                      transition: 'transform 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateY(-8px)',
                       },
                     }}
                   >
-                    <CardContent>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <Avatar
-                          src={testimonial.avatar}
-                          sx={{ width: 60, height: 60, mr: 2 }}
-                        />
-                        <Box>
-                          <Typography variant="h6">
-                            {testimonial.name}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {testimonial.position}
-                          </Typography>
-                        </Box>
-                      </Box>
-                      <Rating value={testimonial.rating} readOnly sx={{ mb: 2 }} />
-                      <Typography variant="body1" color="text.secondary" sx={{ fontStyle: 'italic' }}>
-                        "{testimonial.comment}"
+                    <CardContent sx={{ textAlign: 'center' }}>
+                      <Avatar
+                        src={member.avatar}
+                        sx={{
+                          width: 120,
+                          height: 120,
+                          mx: 'auto',
+                          mb: 2,
+                          border: `4px solid ${theme.palette.primary.main}`,
+                        }}
+                      />
+                      <Typography variant="h6" gutterBottom>
+                        {member.name}
                       </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        color="primary"
+                        gutterBottom
+                        sx={{ fontWeight: 500 }}
+                      >
+                        {member.position}
+                      </Typography>
+                      <Typography color="text.secondary" paragraph>
+                        {member.bio}
+                      </Typography>
+                      <Divider sx={{ my: 2 }} />
+                      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
+                        <IconButton
+                          component="a"
+                          href={member.social.linkedin}
+                          color="primary"
+                          size="small"
+                        >
+                          <LinkedInIcon />
+                        </IconButton>
+                        <IconButton
+                          component="a"
+                          href={member.social.twitter}
+                          color="primary"
+                          size="small"
+                        >
+                          <TwitterIcon />
+                        </IconButton>
+                        <IconButton
+                          component="a"
+                          href={`mailto:${member.social.email}`}
+                          color="primary"
+                          size="small"
+                        >
+                          <EmailIcon />
+                        </IconButton>
+                      </Box>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -304,48 +411,131 @@ function About() {
           </Grid>
         </Box>
 
-        {/* Call to Action */}
+        {/* Enhanced Testimonials Carousel */}
+        <Box sx={{ my: 8, position: 'relative' }}>
+          <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', mb: 4 }}>
+            <FormatQuoteIcon sx={{ mr: 1, verticalAlign: 'bottom' }} />
+            ماذا يقول عنا ضيوفنا
+          </Typography>
+          <Box sx={{ position: 'relative' }}>
+            <IconButton
+              onClick={prevTestimonial}
+              sx={{
+                position: 'absolute',
+                left: { xs: 'calc(50% - 100px)', md: -20 },
+                top: '50%',
+                transform: 'translateY(-50%)',
+                bgcolor: 'background.paper',
+                boxShadow: 1,
+                '&:hover': { bgcolor: 'background.paper' },
+              }}
+            >
+              <ArrowBackIcon />
+            </IconButton>
+            <IconButton
+              onClick={nextTestimonial}
+              sx={{
+                position: 'absolute',
+                right: { xs: 'calc(50% - 100px)', md: -20 },
+                top: '50%',
+                transform: 'translateY(-50%)',
+                bgcolor: 'background.paper',
+                boxShadow: 1,
+                '&:hover': { bgcolor: 'background.paper' },
+              }}
+            >
+              <ArrowForwardIcon />
+            </IconButton>
+            <motion.div
+              key={currentTestimonialIndex}
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -100 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Card
+                sx={{
+                  maxWidth: 600,
+                  mx: 'auto',
+                  position: 'relative',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: 4,
+                    backgroundColor: theme.palette.primary.main,
+                    borderTopLeftRadius: theme.shape.borderRadius,
+                    borderTopRightRadius: theme.shape.borderRadius,
+                  },
+                }}
+              >
+                <CardContent sx={{ textAlign: 'center', py: 4 }}>
+                  <Avatar
+                    src={testimonials[currentTestimonialIndex].avatar}
+                    sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
+                  />
+                  <Typography variant="h6" gutterBottom>
+                    {testimonials[currentTestimonialIndex].name}
+                  </Typography>
+                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                    {testimonials[currentTestimonialIndex].position}
+                  </Typography>
+                  <Rating
+                    value={testimonials[currentTestimonialIndex].rating}
+                    readOnly
+                    sx={{ mb: 2 }}
+                  />
+                  <Typography
+                    variant="body1"
+                    color="text.secondary"
+                    sx={{
+                      fontStyle: 'italic',
+                      maxWidth: 450,
+                      mx: 'auto',
+                    }}
+                  >
+                    "{testimonials[currentTestimonialIndex].comment}"
+                  </Typography>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </Box>
+        </Box>
+
+        {/* Contact CTA Section */}
         <motion.div
-          variants={fadeInUp}
-          initial="initial"
-          whileInView="animate"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <Paper
-            elevation={3}
+          <Box
             sx={{
-              p: { xs: 3, md: 6 },
+              my: 8,
+              py: 6,
+              px: 4,
               textAlign: 'center',
-              background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)} 0%, ${alpha(theme.palette.background.paper, 1)} 100%)`,
-              borderRadius: 4,
+              borderRadius: 2,
+              bgcolor: alpha(theme.palette.primary.main, 0.05),
             }}
           >
             <Typography variant="h4" gutterBottom>
               هل أنت مستعد لتجربة إقامة لا تُنسى؟
             </Typography>
-            <Typography variant="body1" color="text.secondary" paragraph sx={{ maxWidth: 600, mx: 'auto' }}>
-              اكتشف الرفاهية والراحة في فندق السعادة. احجز إقامتك اليوم واستمتع بتجربة فريدة.
+            <Typography color="text.secondary" sx={{ mb: 4, maxWidth: 600, mx: 'auto' }}>
+              اتصل بنا اليوم لحجز إقامتك في فندق السعادة واستمتع بتجربة ضيافة استثنائية
             </Typography>
             <Button
               component={RouterLink}
-              to="/rooms"
+              to="/contact"
               variant="contained"
               size="large"
-              sx={{
-                mt: 2,
-                px: 4,
-                py: 1.5,
-                borderRadius: 2,
-                '&:hover': {
-                  transform: 'translateY(-2px)',
-                  boxShadow: theme.shadows[4],
-                },
-                transition: 'all 0.3s ease',
-              }}
+              endIcon={<ArrowForwardIcon />}
             >
-              احجز الآن
+              تواصل معنا
             </Button>
-          </Paper>
+          </Box>
         </motion.div>
       </Container>
     </Box>
