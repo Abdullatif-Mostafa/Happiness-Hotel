@@ -9,6 +9,7 @@ import Rooms from './pages/Rooms';
 import Services from './pages/Services';
 import Offers from './pages/Offers';
 import Contact from './pages/Contact';
+import About from './pages/About';
 
 const theme = createTheme({
   direction: 'rtl',
@@ -37,6 +38,7 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/offers" element={<Offers />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="about" element={<About />} />
         </Routes>
         <Footer />
       </Router>
