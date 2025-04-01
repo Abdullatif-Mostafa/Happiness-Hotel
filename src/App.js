@@ -33,7 +33,11 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<>
+          <Home/>
+          <Offers />
+          <Rooms/>
+          </>} />
           <Route path="/rooms" element={<Rooms />} />
           <Route path="/services" element={<Services />} />
           <Route path="/offers" element={<Offers />} />
