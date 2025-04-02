@@ -175,7 +175,15 @@ function About() {
           overflow: 'hidden',
         }}
       >
-        <motion.div style={{ y }} sx={{ position: 'absolute', width: '100%', height: '100%' }}>
+        <Box
+          component={motion.div}
+          sx={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+          }}
+          style={{ y }}
+        >
           <Box
             component="img"
             src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1920"
@@ -187,9 +195,10 @@ function About() {
               opacity: 0.4,
             }}
           />
-        </motion.div>
+        </Box>
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
-          <motion.div
+          <Box
+            component={motion.div}
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -216,7 +225,7 @@ function About() {
             >
               حيث تلتقي الأصالة العربية مع الرفاهية العصرية
             </Typography>
-          </motion.div>
+          </Box>
         </Container>
       </Box>
 
@@ -225,7 +234,8 @@ function About() {
         <Grid container spacing={3} sx={{ mb: 8 }}>
           {stats.map((stat, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
-              <motion.div
+              <Box
+                component={motion.div}
                 variants={scaleIn}
                 initial="initial"
                 whileInView="animate"
@@ -267,7 +277,7 @@ function About() {
                     </Typography>
                   </CardContent>
                 </Card>
-              </motion.div>
+              </Box>
             </Grid>
           ))}
         </Grid>
@@ -282,7 +292,8 @@ function About() {
             {milestones.map((milestone, index) => (
               <TimelineItem key={index}>
                 <TimelineSeparator>
-                  <motion.div
+                  <Box
+                    component={motion.div}
                     variants={scaleIn}
                     initial="initial"
                     whileInView="animate"
@@ -292,11 +303,12 @@ function About() {
                     <TimelineDot color="primary">
                       <EventIcon />
                     </TimelineDot>
-                  </motion.div>
+                  </Box>
                   {index < milestones.length - 1 && <TimelineConnector />}
                 </TimelineSeparator>
                 <TimelineContent>
-                  <motion.div
+                  <Box
+                    component={motion.div}
                     variants={slideIn(index % 2 === 0 ? 'right' : 'left')}
                     initial="initial"
                     whileInView="animate"
@@ -320,7 +332,7 @@ function About() {
                         {milestone.description}
                       </Typography>
                     </Paper>
-                  </motion.div>
+                  </Box>
                 </TimelineContent>
               </TimelineItem>
             ))}
@@ -336,7 +348,8 @@ function About() {
           <Grid container spacing={4}>
             {teamMembers.map((member, index) => (
               <Grid item xs={12} md={4} key={index}>
-                <motion.div
+                <Box
+                  component={motion.div}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -405,7 +418,7 @@ function About() {
                       </Box>
                     </CardContent>
                   </Card>
-                </motion.div>
+                </Box>
               </Grid>
             ))}
           </Grid>
@@ -446,7 +459,8 @@ function About() {
             >
               <ArrowForwardIcon />
             </IconButton>
-            <motion.div
+            <Box
+              component={motion.div}
               key={currentTestimonialIndex}
               initial={{ opacity: 0, x: 100 }}
               animate={{ opacity: 1, x: 0 }}
@@ -500,12 +514,13 @@ function About() {
                   </Typography>
                 </CardContent>
               </Card>
-            </motion.div>
+            </Box>
           </Box>
         </Box>
 
         {/* Contact CTA Section */}
-        <motion.div
+        <Box
+          component={motion.div}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -536,7 +551,7 @@ function About() {
               تواصل معنا
             </Button>
           </Box>
-        </motion.div>
+        </Box>
       </Container>
     </Box>
   );
